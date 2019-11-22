@@ -8,6 +8,7 @@ if is_windows():
     import win32com.client as win32
 else:
     import os
+    import pyautogui
 
 
 class MailSender:
@@ -34,10 +35,31 @@ class MailSender:
         @staticmethod
         def send_email(dest_email, subj="", msg="", file_path=None):
             try:
-                thunder_str = "thunderbird -compose to={dest},subject={subj},body={msg}"\
+                thp = "thunderbird"
+                # for root, dirs, files in os.walk(r'/'):
+
+
+                #     for name in files:
+                #         if name == "thunderbird":
+                #             thp = os.path.abspath(os.path.join(root, name))
+                thunder_str = thp + " -compose to={dest},subject={subj},body={msg}"\
                                 .format(dest=dest_email, subj=subj, msg=msg)
                 if file_path:
                     thunder_str += ",attachment={path}".format(path=file_path)
+                #thunder_str += " | "
+                os.system(thunder_str)
+
+                #os.system("xdotool search --name 'Mozilla Thunderbird' key --window %1 shift+F5")
+                pass
+            except BaseException as ex:
+                print("EMAIL LINUX ERROR: ", ex)
+
+import time
+sender = MailSender()
+sender.send_email("v.demchenko@angaratech.ru", "Test", "Test!")
+time.sleep(2)
+pyautogui.hotkey('ctrl', 'enter')
+pyautogui.press('enter')
                 os.system(thunder_str)
                 pass
             except BaseException as ex:
